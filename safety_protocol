@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Grover's Overshoot Simulatie</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body { font-family: sans-serif; background: #f4f4f9; display: flex; justify-content: center; padding: 20px; }
+    .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 450px; }
+    .viz { height: 250px; border-bottom: 2px solid #ccc; margin-bottom: 20px; position: relative; }
+    .vector { position: absolute; bottom: 0; left: 50%; width: 4px; background: #e67e22; transform-origin: bottom; transition: transform 1s; }
+    .overshoot-box { padding: 15px; background: #fff0e6; border: 1px solid #e67e22; border-radius: 6px; }
+    button { width: 100%; padding: 10px; cursor: pointer; background: #3498db; color: white; border: none; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<div id="app" class="card">
+  <h2>Grover's Amplitude Overshoot</h2>
+  <div class="viz">
+    <div class="vector" :style="{ height: '200px', transform: 'rotate(' + currentAngle + 'deg)' }"></div>
+  </div>
+  
+  <p>Huidige hoek: {{ Math.abs(currentAngle).toFixed(1) }}&deg;</p>
+  
+  <div v-if="isOvershoot" class="overshoot-box">
+    <strong>Waarschuwing: Overshoot gedetecteerd!</strong><br>
+    Afwijking: {{ (Math.abs(currentAngle) - 90).toFixed(1) }}&deg; voorbij het doel.
+  </div>
+
+  <button @click="rotateVector" :disabled="steps >= 3">Volgende Iteratie</button>
+</div>
+
+<script>
+  const { createApp, ref, computed } = Vue;
+  createApp({
+    setup() {
+      const steps = ref(0);
+      const angles = [20.7, 62.1, 103.5]; // Geometrische stappen voor N=8
+      
+      const currentAngle = computed(() => {
+        if (steps.value === 0) return 20.7;
+        return angles[steps.value - 1] || 103.5;
+      });
+
+      const isOvershoot = computed(() => Math.abs(currentAngle.value) > 90);
+
+      const rotateVector = () => { if (steps.value < 3) steps.value++; };
+
+      return { steps, currentAngle, isOvershoot, rotateVector };
+    }
+  }).mount('#app');
+</script>
+</body>
+</html>
