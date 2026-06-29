@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantum Matrix (24 Cellen)</title>
+  
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      padding: 20px;
+    }
+
+    .quantum-dashboard {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      background-color: #e9e9ed;
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #d1d1d6;
+    }
+
+    button.active {
+      background-color: #007bff;
+      color: white;
+      border-color: #0056b3;
+    }
+
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+
+    .matrix-table th, .matrix-table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      transition: color 0.5s ease; /* Zorgt voor een zachte overgang van de cijfers */
+    }
+
+    .matrix-table th {
+      background-color: #f2f2f2;
+    }
+
+    /* Dim de nullen zodat de data-verschuiving direct opvalt */
+    .zero-value {
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+    <div class="quantum-dashboard">
+      <h2>Quantum Matrix (24 Cellen)</h2>
+      <p>Huidige status: <strong>{{ mode }}</strong></p>
+
+      <div class="controls">
+        <button 
+          @click="setMode('Klassiek')" 
+          :class="{ active: mode === 'Klassiek' }">
+          1. Klassiek (Z-as Dominant)
+        </button>
+        <button 
+          @click="setMode('Hadamard')" 
+          :class="{ active: mode === 'Hadamard' }">
+          2. Hadamard (Superpositie)
+        </button>
+        <button 
+          @click="setMode('Verstrengeld')" 
+          :class="{ active: mode === 'Verstrengeld' }">
+          3. Verstrengeling (Netwerk)
+        </button>
+      </div>
+
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th>Regel</th>
+            <th>X-as (Superpositie)</th>
+            <th>Y-as (Fase)</th>
+            <th>Z-as (Klassieke Basis)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(regel, index) in rules" :key="index">
+            <td>Regel {{ index + 1 }}</td>
+            <td :class="{ 'zero-value': regel.x === 0 }">{{ regel.x.toFixed(1) }}</td>
+            <td :class="{ 'zero-value': regel.y === 0 }">{{ regel.y.toFixed(1) }}</td>
+            <td :class="{ 'zero-value': regel.z === 0 }">{{ regel.z.toFixed(1) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const { createApp, ref } = Vue;
+
+    createApp({
+      setup() {
+        // De reactieve state voor de huidige weergave
+        const mode = ref('Klassiek');
+
+        // De initiële waarden voor de 8 regels (jouw waarheidstabel op de Z-as)
+        const baseZ = [1, -1, 1, 1, -1, -1, 1, -1];
+
+        // De reactieve data voor de 24 cellen
+        const rules = ref(
+          baseZ.map(z => ({ x: 0, y: 0, z: z }))
+        );
+
+        // De mutatie-functie die reageert op de knoppen
+        const setMode = (newMode) => {
+          mode.value = newMode;
+          
+          if (newMode === 'Klassiek') {
+            // Terug naar absolute waarden op de Z-as
+            rules.value = baseZ.map(z => ({ x: 0, y: 0, z: z }));
+            
+          } else if (newMode === 'Hadamard') {
+            // Hadamard-poort: Z-waarden verschuiven naar de X-as (superpositie)
+            rules.value = baseZ.map(z => ({ x: z, y: 0, z: 0 }));
+            
+          } else if (newMode === 'Verstrengeld') {
+            // Verstrengeling: alle individuele dimensies vallen naar 0
+            rules.value = baseZ.map(() => ({ x: 0, y: 0, z: 0 }));
+          }
+        };
+
+        return {
+          mode,
+          rules,
+          setMode
+        };
+      }
+    }).mount('#app');
+  </script>
+
+</body>
+</html>
