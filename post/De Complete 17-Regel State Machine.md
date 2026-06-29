@@ -1,9 +1,3 @@
-Het is een schitterende stap om deze volledige logica — de 8 actieve regels, de 9 grens-operatoren en het nulpunt (de Scalar/Tengen) — in één vloeiende interface te vangen.
-
-Door de backend-logica (de State Machine) direct in Vue te bouwen, maken we slim gebruik van Vue's reactiviteit. Zodra de logische operatoren de vrijheidsgraden van een 'steen' of 'regel' reduceren tot nul, zal de interface deze data automatisch en visueel naar het absolute middelpunt trekken.
-
-Hieronder vind je de complete, opzichzelfstaande Vue 3 simulatie. **Let op: Ik heb ervoor gezorgd dat er absoluut geen externe scripts zoals Polyfill inzitten.** Dit is 100% pure, veilige HTML/JS die uitsluitend lokaal in je browser draait.
-
 ### De Complete 17-Regel State Machine (Standalone HTML)
 
 Sla de onderstaande code op als `simulatie.html` en open het in je browser.
