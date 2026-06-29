@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grover's Algoritme: Geometrische Simulatie (N=8)</title>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root {
+      --bg-color: #f8f9fa;
+      --text-color: #2c3e50;
+      --primary: #34495e;
+      --accent: #e67e22; /* Oracle oranje */
+      --diffuser: #3498db; /* Diffuser blauw */
+      --panel-bg: #ffffff;
+      --vector-color: #2c3e50;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .dashboard {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    @media (min-width: 900px) {
+      .dashboard { flex-direction: row; }
+    }
+
+    /* Linker paneel: Logica & Besturing */
+    .control-panel {
+      flex: 1;
+      background: var(--panel-bg);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    h1 { color: var(--primary); font-size: 1.6em; border-bottom: 2px solid var(--diffuser); padding-bottom: 10px; margin-top: 0; }
+    h2 { font-size: 1.2em; color: var(--text-color); }
+    
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      margin: 25px 0;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: white;
+      transition: all 0.3s;
+    }
+
+    button:disabled { background-color: #bdc3c7; cursor: not-allowed; }
+    .btn-next { background-color: var(--diffuser); }
+    .btn-next:hover:not(:disabled) { background-color: #2980b9; }
+    .btn-reset { background-color: #95a5a6; }
+    .btn-reset:hover { background-color: #7f8c8d; }
+
+    .step-indicator {
+      margin-top: 20px;
+      padding: 20px;
+      border-left: 4px solid var(--accent);
+      background-color: #fdfbf7;
+      border-radius: 0 8px 8px 0;
+      min-height: 120px;
+    }
+
+    .step-title { font-weight: bold; color: var(--accent); font-size: 1.1em; margin-bottom: 10px;}
+
+    /* Rechter paneel: SVG Visualisatie */
+    .viz-panel {
+      flex: 1;
+      background: var(--panel-bg);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    svg {
+      width: 100%;
+      max-width: 450px;
+      height: auto;
+      overflow: visible;
+    }
+
+    /* Vector rotatie animatie */
+    .quantum-vector {
+      transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+      transform-origin: 50px 350px; /* Origin van het assenstelsel */
+    }
+
+    .axis-label { font-size: 16px; font-weight: bold; fill: #7f8c8d; }
+    .math-label { font-size: 18px; font-style: italic; }
+
+  </style>
+</head>
+<body>
+
+  <div id="app" class="dashboard">
+    
+    <div class="control-panel">
+      <h1>Grover's Algoritme (N=8)</h1>
+      <p>Observeer de geometrische amplitude-amplificatie in een tweedimensionale zoekruimte. De vector roteert van een gelijke waarschijnlijkheid ($|\alpha\rangle$) naar het exacte gezochte antwoord ($|\beta\rangle$).</p>
+      
+      <div class="btn-group">
+        <button class="btn-next" @click="nextStep" :disabled="currentStepIndex >= steps.length - 1">
+          Volgende Operator Toepassen
+        </button>
+        <button class="btn-reset" @click="resetSim">Reset Simulatie</button>
+      </div>
+
+      <div class="step-indicator">
+        <div class="step-title">{{ currentStep.title }}</div>
+        <div class="step-desc" v-html="currentStep.description"></div>
+      </div>
+    </div>
+
+    <div class="viz-panel">
+      <svg viewBox="0 0 450 400">
+        
+        <path d="M 50 350 L 350 350 A 300 300 0 0 0 330 240 Z" fill="#e3f2fd" opacity="0.6"/>
+
+        <line x1="50" y1="350" x2="400" y2="350" stroke="#bdc3c7" stroke-width="3" />
+        <text x="410" y="355" class="axis-label">|&alpha;&rang;</text>
+        
+        <line x1="50" y1="350" x2="50" y2="50" stroke="#bdc3c7" stroke-width="3" />
+        <text x="40" y="40" class="axis-label">|&beta;&rang;</text>
+
+        <line x1="50" y1="350" x2="330" y2="240" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="6,6" />
+        <text x="340" y="235" class="math-label" fill="#7f8c8d">|&psi;&#8320;&rang;</text>
+
+        <g class="quantum-vector" :style="{ transform: `rotate(${currentStep.svgAngle}deg)` }">
+          <line x1="50" y1="350" x2="330" y2="350" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
+          <polygon points="330,345 345,350 330,355" fill="#2c3e50" />
+        </g>
+        
+      </svg>
+    </div>
+
+  </div>
+
+  <script>
+    const { createApp, ref, computed, watch } = Vue;
+
+    createApp({
+      setup() {
+        const currentStepIndex = ref(0);
+
+        // Bij N=8 is de initiële hoek theta = arcsin(1/sqrt(8)) = ~20.7 graden
+        // SVG roteert met de klok mee. Omhoog is dus een negatieve hoek in SVG.
+        
+        const steps = [
+          {
+            title: "1. Hadamard (Initiële Superpositie)",
+            description: "De $H^{\\otimes 3}$ poort wordt toegepast. De toestandsvector $|\psi_0\rangle$ start dicht bij de x-as ($|\\alpha\\rangle$). De kans op het juiste antwoord is momenteel slechts 1 op 8 ($12.5\\%$).",
+            svgAngle: -20.7 
+          },
+          {
+            title: "2. Oracle 1 ($U_f$)",
+            description: "De Oracle herkent het te zoeken item en klapt het teken (de fase) om. Geometrisch is dit een spiegeling over de horizontale $|\\alpha\\rangle$-as.",
+            svgAngle: 20.7 
+          },
+          {
+            title: "3. Diffuser 1 ($U_s$)",
+            description: "De Diffuser voert inversie om het gemiddelde uit. Dit vertaalt zich naar een spiegeling over de initiële vector $|\\psi_0\\rangle$. Het resultaat? Een gigantische rotatie richting het juiste antwoord.",
+            svgAngle: -62.1 
+          },
+          {
+            title: "4. Oracle 2 ($U_f$)",
+            description: "We starten iteratie 2. De Oracle spiegelt de vector wederom over de horizontale as ter voorbereiding op de laatste klap.",
+            svgAngle: 62.1 
+          },
+          {
+            title: "5. Diffuser 2 & Meting",
+            description: "De laatste Diffuser roteert de toestand naar zijn finale positie. De vector valt nu nagenoeg perfect samen met de verticale as ($|\\beta\\rangle$). Bij meting is het juiste element gegarandeerd gevonden.",
+            svgAngle: -103.5 // (ongeveer 90 graden, het schiet er wiskundig nét overheen bij N=8)
+          }
+        ];
+
+        const currentStep = computed(() => steps[currentStepIndex.value]);
+
+        const nextStep = () => {
+          if (currentStepIndex.value < steps.length - 1) {
+            currentStepIndex.value++;
+          }
+        };
+
+        const resetSim = () => {
+          currentStepIndex.value = 0;
+        };
+
+        // Render MathJax opnieuw als de tekst in de beschrijving verandert
+        watch(currentStepIndex, () => {
+          setTimeout(() => {
+            if (window.MathJax) {
+              window.MathJax.typesetPromise();
+            }
+          }, 50);
+        });
+
+        return {
+          currentStepIndex,
+          steps,
+          currentStep,
+          nextStep,
+          resetSim
+        };
+      }
+    }).mount('#app');
+  </script>
+
+</body>
+</html>
