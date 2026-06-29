@@ -24,7 +24,7 @@ $$\lvert \psi \rangle = \alpha \lvert \uparrow \rangle + \beta \lvert \downarrow
 
 ## 2. De Wiskundige Match met 24 Cellen
 
-Jouw structuur heeft 9 regels + 8 regels = 17 regels in totaal. Als we dit uitzetten tegen de 24 cellen, ontstaat er een perfecte quantum-invulling via de **Pauli-spinmatrices**:
+De structuur heeft 9 regels + 8 regels = 17 regels in totaal. Als we dit uitzetten tegen de 24 cellen, ontstaat er een perfecte quantum-invulling via de **Pauli-spinmatrices**:
 
 Een quantum-spin beweegt zich in een driedimensionale ruimte. Om de volledige realiteit van een spin te beschrijven, heb je altijd 3 coördinaten (assen) nodig: de X-as, Y-as en Z-as.
 
