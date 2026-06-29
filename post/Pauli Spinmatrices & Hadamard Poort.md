@@ -3,11 +3,10 @@
 **Auteur:** Janna  
 **Datum:** 29 Juni 2026  
 
-Ja, het vullen van de cellen met een spin-1/2 is de meest logische en natuurkundig correcte invulling voor deze specifieke quantum variant. 
 
 Wanneer je overstapt van klassieke logica naar een quantum-werkelijkheid, veranderen klassieke bits (0 en 1) in quantumtoestanden. In de quantummechanica is de spin van een deeltje (zoals een elektron) de directe fysieke tegenhanger van een bit.
 
-Hieronder staat hoe deze spin-invulling jouw specifieke matrix van 24 cellen logisch verklaart.
+Hieronder staat hoe deze spin-invulling de specifieke matrix van 24 cellen logisch verklaart.
 
 ---
 
@@ -51,8 +50,3 @@ De overige 9 regels van de eerste tabel (1-10) fungeren in dit model als de **gr
 
 Door de cellen te vullen met een spin ($\lvert \uparrow \rangle$ / $\lvert \downarrow \rangle$), transformeer je de tabel van een statische, klassieke matrix naar een dynamisch quantum-systeem waarin de 24 cellen de complete vrijheidsgraden van 8 verstrengelde deeltjes beschrijven.
 
-Als je wilt, kunnen we nu naar de volgende stap kijken. Laat me weten:
-
-* Wil je de exacte spin-combinaties (zoals up/down verdelingen) voor de 24 cellen uitschrijven?
-* Moeten we de entanglement (verstrengeling) tussen de 8 regels en de 9 grenzen berekenen?
-* Wil je zien hoe een specifieke quantum-operator (zoals de Hadamard-poort) deze tabel beïnvloedt?
