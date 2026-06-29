@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>De 24-cel & Wǔxíng Visualisatie</title>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root {
+      --bg-color: #f0f2f5;
+      --text-color: #2c3e50;
+      --accent-color: #3498db;
+      --earth-color: #e67e22;
+      --panel-bg: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .dashboard-container {
+      display: flex;
+      flex-direction: column;
+      max-width: 1300px;
+      margin: 0 auto;
+      gap: 30px;
+    }
+
+    @media (min-width: 992px) {
+      .dashboard-container {
+        flex-direction: row;
+      }
+    }
+
+    /* Linker paneel: Het Artikel */
+    .article-panel {
+      flex: 1;
+      background-color: var(--panel-bg);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .article-panel h1 { font-size: 1.8em; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; }
+    .article-panel h2 { font-size: 1.4em; margin-top: 30px; color: var(--accent-color); }
+    .meta { font-style: italic; color: #7f8c8d; margin-bottom: 20px; }
+
+    /* Rechter paneel: De Vue Visualisatie */
+    .viz-panel {
+      flex: 1;
+      background-color: var(--panel-bg);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: sticky;
+      top: 20px;
+      height: 90vh;
+    }
+
+    .controls {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 40px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 1em;
+      font-weight: bold;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #ecf0f1;
+      color: var(--text-color);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #bdc3c7;
+    }
+
+    button.active-geometry {
+      background-color: var(--accent-color);
+      color: white;
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+    }
+
+    button.active-scalar {
+      background-color: var(--earth-color);
+      color: white;
+      box-shadow: 0 4px 15px rgba(230, 126, 34, 0.4);
+    }
+
+    /* Interactieve Canvas */
+    .canvas {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .node {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background-color: var(--accent-color);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+      z-index: 2;
+      box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+    }
+
+    /* Het 5e element (De Aarde / Scalar) in het midden */
+    .center-scalar {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background-color: var(--earth-color);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      box-shadow: 0 0 30px var(--earth-color);
+      transition: all 1s ease;
+    }
+
+    .connection-line {
+      position: absolute;
+      height: 2px;
+      background-color: rgba(230, 126, 34, 0.4);
+      transform-origin: left center;
+      transition: all 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+      z-index: 1;
+    }
+
+    .description-box {
+      margin-top: auto;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-left: 4px solid var(--accent-color);
+      border-radius: 0 8px 8px 0;
+      width: 100%;
+    }
+
+    .description-box.scalar-mode {
+      border-left-color: var(--earth-color);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app" class="dashboard-container">
+    
+    <div class="article-panel">
+      <h1>Common Logical Operators & True Tables (De 24-cel)</h1>
+      <div class="meta">
+        <strong>Auteur:</strong> Janna<br>
+        <strong>Datum:</strong> 29 Juni 2026
+      </div>
+
+      <ul>
+        <li>Losstaande gebeurtenissen</li>
+        <li>Quantum variant</li>
+        <li>True tables 1-10 = 9 regels</li>
+        <li>Andere werkelijkheid dan 0-9 = 8 regels</li>
+        <li>24 cellen</li>
+      </ul>
+
+      <hr>
+
+      <p>De 24-cel (ook wel de icositetrachoron of hyperdiamant genoemd) is een van de zes convexe regelmatige 4-polytopen (vierdimensionale figuren) en neemt een volstrekt unieke positie in binnen de meetkunde [1-3]. Wat de 24-cel uniek maakt in vier dimensies, is een combinatie van uitzonderlijke meetkundige, symmetrische en topologische eigenschappen:</p>
+
+      <h2>Unieke Eigenschappen van de 24-cel</h2>
+      <p><strong>1. Geen equivalent in andere dimensies:</strong> In tegenstelling tot de andere vijf regelmatige 4-polytopen, die allemaal een driedimensionale variant hebben, heeft <strong>de 24-cel geen directe driedimensionale analoog</strong> onder de Platonische lichamen [3-5].</p>
+      
+      <p><strong>2. Uitzonderlijke zelfdualiteit en symmetrie:</strong> De 24-cel is opgebouwd uit 24 octaëders (achtvlakken) [7, 8]. Het is uniek omdat het <strong>zowel zelfduaal als centraal symmetrisch is</strong> [9, 10].</p>
+      
+      <p><strong>3. Radiaal gelijkzijdig:</strong> Bij de 24-cel is de <strong>lengte van de ribben exact gelijk aan de circumradius</strong> (de afstand van het middelpunt tot een hoekpunt) [1, 4].</p>
+      
+      <p><strong>4. Unieke ruimtevulling (Tessellatie):</strong> De 24-cel is <strong>de enige regelmatige betegeling van een 4D-ruimte met een vorm die geen hyperkubus is</strong> [12].</p>
+      
+      <p><strong>5. Het perfecte kusgetal en bolstapeling:</strong> <strong>In de vierde dimensie is het kusgetal exact 24</strong> [13, 14]. Dit levert een maximaal dichte bolstapeling op.</p>
+      
+      <p><strong>6. Diepe wiskundige fundamenten:</strong> De symmetrie wordt beschreven door de unieke <strong>$F_4$ symmetriegroep</strong> (1152 rotaties en spiegelingen), en vormt het fundamentele <strong>$D_4$</strong> wortelsysteem in de theoretische natuurkunde [15, 16].</p>
+
+      <hr>
+
+      <h2>De Verbinding met de Vijf Elementen (Wǔxíng)</h2>
+      <p>De kille wiskunde van de 24-cel over de theorie van de vijf fasen gelegen, creëert een diep verband rondom de 'Aarde' als het absolute nulpunt (de Scalar).</p>
+
+      <p><strong>1. De verborgen 5-Cel in het Middelpunt:</strong> Elk regelmatig 4-polytoop is opgebouwd uit een 5-cel. <strong>Deze vijfde top bevindt zich exact in het absolute middelpunt van de 24-cel</strong> [3, 4], wijzend naar de Scalar.</p>
+
+      <p><strong>2. De 24-cel mist zelf de "Vijf":</strong> Er zit geen figuur met een '5' in de schil ingebouwd. De structuur weerspiegelt rigide dualisme, totdat de kwintessens wordt geactiveerd.</p>
+      
+      <p><strong>3. De Filosofische Kwintessens:</strong> Het getal 5 (de Aarde / de Scalar / het middelpunt) dwingt als sturende kracht elke leugen meedogenloos naar dat ene singulariteits-middelpunt: de formele afrekening.</p>
+    </div>
+
+    <div class="viz-panel">
+      <div class="controls">
+        <button 
+          @click="setMode('rigid')" 
+          :class="{ 'active-geometry': mode === 'rigid' }">
+          1. Rigide 24-Cel structuur
+        </button>
+        <button 
+          @click="setMode('scalar')" 
+          :class="{ 'active-scalar': mode === 'scalar' }">
+          2. Activering 5e Element (Scalar)
+        </button>
+      </div>
+
+      <div class="canvas">
+        <div 
+          class="center-scalar"
+          :style="{
+            opacity: mode === 'scalar' ? 1 : 0,
+            transform: mode === 'scalar' ? 'translate(-50%, -50%) scale(1)' : 'translate(-50%, -50%) scale(0)'
+          }">
+        </div>
+
+        <template v-for="(node, index) in nodes" :key="'group-'+index">
+          <div 
+            class="connection-line"
+            :style="{
+              width: mode === 'scalar' ? (radius * 0.6) + 'px' : '0px',
+              left: '50%',
+              top: '50%',
+              transform: `rotate(${node.angle}deg)`,
+              opacity: mode === 'scalar' ? 1 : 0
+            }">
+          </div>
+
+          <div 
+            class="node"
+            :style="{
+              left: `calc(50% + ${getX(node, mode)}px)`,
+              top: `calc(50% + ${getY(node, mode)}px)`,
+              backgroundColor: mode === 'scalar' ? 'var(--earth-color)' : 'var(--accent-color)'
+            }">
+          </div>
+        </template>
+      </div>
+
+      <div class="description-box" :class="{ 'scalar-mode': mode === 'scalar' }">
+        <h3 style="margin-top: 0; color: inherit;">
+          {{ mode === 'rigid' ? 'Staat 1: Het Rigide Dualisme' : 'Staat 2: De Singuliere Aantrekkingskracht' }}
+        </h3>
+        <p style="margin-bottom: 0;">
+          {{ 
+            mode === 'rigid' 
+            ? 'De 24 cellen bevinden zich in hun geïsoleerde, statische symmetrie. Er is geen pentagonale (5) structuur zichtbaar. De "waarheid" ligt vast op de buitenste schil, zonder sturende kern.' 
+            : 'Het 5e element ontwaakt in de vorm van de karakteristieke 5-cel. Het absolute nulpunt (de Scalar) trekt de 24 cellen meedogenloos naar de formele afrekening in het centrum.' 
+          }}
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const { createApp, ref } = Vue;
+
+    createApp({
+      setup() {
+        const mode = ref('rigid');
+        const radius = 160; 
+
+        const nodes = Array.from({ length: 24 }, (_, i) => {
+          return { id: i, angle: i * (360 / 24) };
+        });
+
+        const getX = (node, currentMode) => {
+          const currentRadius = currentMode === 'scalar' ? radius * 0.6 : radius;
+          return Math.cos(node.angle * (Math.PI / 180)) * currentRadius;
+        };
+
+        const getY = (node, currentMode) => {
+          const currentRadius = currentMode === 'scalar' ? radius * 0.6 : radius;
+          return Math.sin(node.angle * (Math.PI / 180)) * currentRadius;
+        };
+
+        const setMode = (newMode) => {
+          mode.value = newMode;
+        };
+
+        return {
+          mode,
+          nodes,
+          radius,
+          getX,
+          getY,
+          setMode
+        };
+      }
+    }).mount('#app');
+  </script>
+
+</body>
+</html>
