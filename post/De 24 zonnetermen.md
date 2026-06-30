@@ -65,12 +65,3 @@ Hieronder vind je een overzichtelijke presentatie van de zonnetermen, ingedeeld 
 | **Dahan** | Grote kou |
 
 ---
-
-### Traditionele wijsheid
-
-De 24 zonnetermen zijn meer dan alleen een kalender; ze dienen als een leidraad voor een gezonde levensstijl:
-
-* **Voedingsadviezen:** In de Chinese traditie past men het dieet aan op de heersende "energie" van het seizoen. Zo is het in de huidige zomerperiode (tussen Xiazhi en Xiaoshu) gebruikelijk om voedsel te eten dat de interne hitte afkoelt en vocht afdrijft, zoals komkommer, mungbonen en bittere meloen.
-* **Balans:** Het concept van *Yang Sheng* (het voeden van het leven) staat centraal. Het doel is om in elk seizoen de balans in het lichaam te bewaren door middel van voeding, beweging (zoals Tai Chi of Qigong) en rust, in lijn met de veranderingen in de natuur.
-
-Bent u op zoek naar specifieke recepten of activiteiten die passen bij de huidige zomerperiode?
