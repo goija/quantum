@@ -1,6 +1,8 @@
-Het is fascinerend hoe de 24 zonnetermen (jieqi) de nauwe verbondenheid tussen de mens, het klimaat en de natuurlijke cycli in de traditionele Chinese cultuur weerspiegelen.
+De 24 zonnetermen (jieqi) die de nauwe verbondenheid tussen de mens, het klimaat en de natuurlijke cycli in de traditionele Chinese cultuur weerspiegelen.
 
 Vandaag is het **30 juni 2026**. Volgens de zonnekalender bevinden we ons momenteel in de periode tussen **Xiazhi** (Zomerzonnewende, die rond 21 juni viel) en **Xiaoshu** (Kleine hitte, die rond 7 juli begint). We zitten dus in de volle overgangsfase van de vroege zomer naar de periode van intensere hitte.
+
+strawberry moon en zon in saturnus 30juni - 1juli 2026
 
 Hieronder vind je een overzichtelijke presentatie van de zonnetermen, ingedeeld per seizoen:
 
