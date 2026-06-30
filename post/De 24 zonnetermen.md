@@ -2,7 +2,7 @@ De 24 zonnetermen (jieqi) die de nauwe verbondenheid tussen de mens, het klimaat
 
 Vandaag is het **30 juni 2026**. Volgens de zonnekalender bevinden we ons momenteel in de periode tussen **Xiazhi** (Zomerzonnewende, die rond 21 juni viel) en **Xiaoshu** (Kleine hitte, die rond 7 juli begint). We zitten dus in de volle overgangsfase van de vroege zomer naar de periode van intensere hitte.
 
-Strawberry moon en zon in boogschutter 30juni - 1juli2026
+Strawberry moon in boogschutter 30juni - 1juli2026 en zon in tweelingen
 
 Hieronder vind je een overzichtelijke presentatie van de zonnetermen, ingedeeld per seizoen:
 
